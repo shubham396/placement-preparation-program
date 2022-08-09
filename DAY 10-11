@@ -1,0 +1,333 @@
+	Subset Sums
+  class Solution
+{
+    void fun(int index,vector<int> &arr,int n,vector<int> &ans,int sum){
+        if(index==arr.size()){
+            ans.push_back(sum);
+            return;
+        }
+        
+        sum+=arr[index];
+        fun(index+1,arr,n,ans,sum);
+        sum-=arr[index];
+        fun(index+1,arr,n,ans,sum);
+    }
+    
+public:
+    vector<int> subsetSums(vector<int> arr, int n)
+    {
+        vector<int> ans;
+        int sum=0;
+        fun(0,arr,n,ans,sum);
+        
+        return ans;
+    }
+};
+  	Subset Sums-2
+   class Solution {
+public:
+    vector<vector<int>> ans;
+    void solve(vector<int> ip, vector<int> op, int idx){
+        ans.push_back(op);
+        for(int i = idx; i < ip.size(); i++) {        
+            if(i != idx and ip[i] == ip[i-1]) continue;
+            op.push_back(ip[i]);
+            solve(ip, op, i+1);
+            op.pop_back();
+        }
+    }
+       
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<int> v;
+        sort(nums.begin(), nums.end());
+        solve(nums, v, 0);
+        return ans;
+    }
+};
+    Combination sum-1
+    class Solution {
+public:
+    void solve(int i,vector<int>&c,vector<vector<int>>&ans,vector<int>&sum,int t){
+        if(i==c.size()){
+            if(t==0){
+                ans.push_back(sum);
+            }
+            return ;
+        }
+        if(c[i]<=t){
+            sum.push_back(c[i]);
+            solve(i,c,ans,sum,t-c[i]);
+            sum.pop_back();
+        }
+        solve(i+1,c,ans,sum,t);
+    }
+    vector<vector<int>> combinationSum(vector<int>& c, int t) {
+        vector<vector<int>>ans;
+        vector<int>sum;
+        solve(0,c,ans,sum,t);
+        return ans;
+    }
+};
+    Combination sum-2
+    class Solution {
+public:
+ 
+    vector<vector<int>> res;
+    
+    vector<int> curr;
+    
+    void helper(vector<int>& nums, int i, int n, int target)
+    {
+        // if target is acheived
+        
+        if(target == 0)
+        {
+            res.push_back(curr);
+            
+            return;
+        }
+        
+        if(i == n)
+            return;
+        
+        // inclusion
+        
+        curr.push_back(nums[i]);
+        
+        if(nums[i] <= target)
+        {
+            helper(nums, i + 1, n, target - nums[i]);
+        }
+        
+        curr.pop_back();
+        
+        // skip duplicates
+        
+        while(i < n - 1 && nums[i] == nums[i + 1])
+        {
+            i++;
+        }
+        
+        // exclusion
+        
+        helper(nums, i + 1, n, target);
+    }
+    
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        
+        int n = candidates.size();
+        
+        // sort the array
+        
+        sort(candidates.begin(), candidates.end());
+        
+        helper(candidates, 0, n, target);
+        
+        return res;
+    }
+};
+    	Palindrome Partitioning
+     class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ans;
+        vector<string> ds;
+        solve(s,0,ans,ds);
+        return ans;
+    }
+    
+    void solve(string s, int idx, vector<vector<string>>& ans,vector<string>& ds){
+        if(idx == s.size()){
+            ans.push_back(ds);
+            return;
+        }
+        for(int i=idx; i<s.size(); i++){
+            string processed = s.substr(idx,i-idx+1);
+            if(isPalindrome(processed)){
+                ds.push_back(processed); 
+                solve(s,i+1,ans,ds);
+                ds.pop_back();
+            }    
+        }
+    }
+    
+    bool isPalindrome(string st){
+        int s = 0;
+        int e = st.size()-1;
+        
+        while(s<=e){
+            if(st[s]!=st[e]){
+                return false;
+            }
+            s++;
+            e--;
+        }
+        return true;
+    }
+};
+      	Print all permutations of a string/array
+        class Solution {
+	public:
+		void helper(vector<vector<int>> &res , vector<int> &nums,int i){
+			if(i==nums.size()){
+				res.push_back(nums);
+				return;
+			}
+		for(int j=i;j<nums.size();j++){
+		   swap(nums[i],nums[j]);
+		   helper(res,nums,i+1);
+		   swap(nums[i],nums[j]);
+		}
+			return;
+		}
+		vector<vector<int>> permute(vector<int>& nums) {
+			vector<vector<int>> res;
+			helper(res,nums,0);
+			return res;
+		}
+	};
+        N queens Problem
+        class Solution {
+    bool isSafe(vector<string> board, int row, int col, int n){
+        int r=row;
+        int c=col;
+        
+        // Checking for upper left diagonal
+        while(row>=0 && col>=0){
+            if(board[row][col]=='Q') return false;
+            row--;
+            col--;
+        }
+        
+        row=r;
+        col=c;
+        // Checking for left
+        while(col>=0){
+            if(board[row][col]=='Q') return false;
+            col--;
+        }
+        
+        row=r;
+        col=c;
+        // Checking for lower left diagonal
+        while(row<n && col>=0){
+            if(board[row][col]=='Q') return false;
+            row++;
+            col--;
+        }
+        
+        return true;
+    }
+    
+    void solve(vector<vector<string>> &ans, vector<string> &board, int n, int col){
+        if(col==n){
+            ans.push_back(board);
+            return;
+        }
+        
+        for(int row=0;row<n;row++){
+            if(isSafe(board,row,col,n)){
+                board[row][col]='Q';
+                solve(ans,board,n,col+1);
+                board[row][col]='.';
+            }
+        }
+    }
+    
+    
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> board;
+        string s(n,'.');
+        for(int i=0;i<n;i++) board.push_back(s);
+        
+        solve(ans,board,n,0);
+        
+        return ans;
+    }
+};
+        Sudoku Solver
+        class Solution {
+public:
+    
+    int isValidSudoku(vector<vector<char>> &A,int x,int y,char c) {
+    // for row check
+    for(int i = 0;i<A[x].size();i++){
+        if(A[x][i]==c) return 0;
+    }
+    // for column check
+    for(int i = 0;i<A.size();i++){
+        if(A[i][y]==c) return 0;
+    }
+    // for block check
+    int row = x/3;
+    row = row * 3;
+    int col = y/3;
+    col = col * 3;
+    // cout<<row<<" "<<col<<endl;
+    for(int i = row;i<row + 3;i++){
+        for(int j = col;j<col+3;j++){
+            if(A[i][j]==c) return 0;
+        }
+    }
+    return 1;
+
+
+}
+
+bool solve(vector<vector<char>> &board){
+    for(int i = 0;i<9;i++){
+        for(int j = 0;j<9;j++){
+            if(board[i][j]=='.'){
+                for(int x = 1;x<=9;x++){
+                    char num = x + '0';
+                    if(isValidSudoku(board,i,j,num)){
+                        board[i][j] = num;
+                        if(solve(board)==true) return true;
+                        else board[i][j] = '.';
+                    }
+                }
+            }
+            if(board[i][j]=='.'){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+    void solveSudoku(vector<vector<char>>& board) {
+        solve(board);
+    }
+};
+        	Rat in a Maze
+          class Solution{
+    public:
+
+   vector<string> ans;
+   void findPathUtil(int i, int j, vector<vector<int>> &m, int n, string s) {
+       if (i < 0 || i >= n || j < 0 || j >= n || m[i][j] == 0)
+           return;
+       if (i == n - 1 && j == n - 1) {
+           ans.push_back(s);
+           return;
+       }
+       m[i][j] = 0;
+       findPathUtil(i + 1, j, m, n, s + "D");
+       findPathUtil(i - 1, j, m, n, s + "U");
+       findPathUtil(i, j + 1, m, n, s + "R");
+       findPathUtil(i, j - 1, m, n, s + "L");
+       m[i][j] = 1;
+   }
+   
+   vector<string> findPath(vector<vector<int>> &m, int n) {
+       string s = "";
+       if (m[0][0] == 0)
+           return ans;
+       if (m[n - 1][n - 1] == 0)
+           return ans;
+       findPathUtil(0, 0, m, n, s);
+       return ans;
+   }
+};
