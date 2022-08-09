@@ -1,0 +1,223 @@
+Populate Next Right pointers of Tree
+class Solution {
+public:
+    Node* connect(Node* root) {
+        
+        if(root == NULL) return root;
+        
+        queue<Node*> q;
+        q.push(root);
+        
+        vector<Node*> v;
+        
+        while(!q.empty()){
+            int n = q.size();
+            v.clear();
+    
+            while(n--){
+                Node* t = q.front();
+                q.pop();
+                
+                v.push_back(t);
+                
+                if(t->left != NULL){ 
+                 q.push(t->left);
+                 q.push(t->right);
+                }
+                
+                //delete (t);
+            }
+            
+            int in=0;
+            
+            for(; in <v.size()-1; in++){
+                v[in]->next = v[in+1];
+            }
+            
+            //v[in]->next = NULL;
+        }
+        
+        return root;
+    }
+};
+Search given Key in BST
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int k) {
+        if(root==NULL){
+            return NULL;
+        }
+       else  if(root->val==k){
+            return root;
+        }
+        else  if(root->val < k){
+           return  searchBST(root->right,k);
+        }
+       else  if(root->val >k){
+           return searchBST(root->left,k);
+        }
+        else{
+        return NULL;
+        }
+        return NULL;
+    }
+};
+	Construct BST from given keys
+  class Solution {
+public:
+    TreeNode* tree(vector<int>& nums,int l,int r){
+        if(l>r){
+            return NULL;
+        }
+        int mid=(l+r)/2;
+        TreeNode* Node=new TreeNode(nums[mid]);
+        Node->left=tree(nums,l,mid-1);
+        Node->right=tree(nums,mid+1,r);
+        return Node;
+    }
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+       return tree(nums,0,nums.size()-1);
+    }
+};
+  	Construct BST from preorder traversal
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+      stack<TreeNode*>s;
+     TreeNode *root = new TreeNode(preorder[0]);
+     TreeNode *curr = root;
+     s.push(root);
+     int i = 1;
+        while(i<preorder.size())
+        {
+            if(preorder[i]<s.top()->val){
+                root->left = new TreeNode(preorder[i]);
+                root = root->left;
+                s.push(root);
+            }
+            else
+            {
+                while(!s.empty() && preorder[i]>s.top()->val)
+                {
+                    root = s.top();
+                    s.pop();
+                }
+                root->right = new TreeNode(preorder[i]);
+                root = root->right;
+                s.push(root);
+            }
+         i++;
+        }
+      return curr;  
+    }
+    Find K-th smallest element in BST
+    class Solution {
+public:
+    void inorder(TreeNode* root,vector<int>& v){
+        if(root==NULL){
+            return ;
+        }
+        inorder(root->left,v);
+        v.push_back(root->val);
+        inorder(root->right,v);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int>v;
+        inorder(root,v);
+      return v[k-1];
+    }
+};
+    Find K-th largest element in BST
+    class Solution {
+public:
+    void inorder(TreeNode* root,vector<int>& v){
+        if(root==NULL){
+            return ;
+        }
+        inorder(root->left,v);
+        v.push_back(root->val);
+        inorder(root->right,v);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int>v;
+        inorder(root,v);
+      return v[k+1];
+    }
+};
+    Find a pair with a given sum in BST
+    class Solution {
+public:
+    unordered_map<int,int> map;
+    bool flag=false;
+    bool findTarget(TreeNode* root, int k) {
+        if(root==NULL)
+            return flag;
+        else if(!flag){
+            int target=k-root->val;
+            if(map.find(root->val)!=map.end()){
+                flag=true;
+                return flag;
+            }
+            else
+                map[target]=1;
+            findTarget(root->left,k);
+            findTarget(root->right,k);
+        }
+        return flag;
+    }
+};
+
+
+class Solution{
+public:
+    void recursion(TreeNode* root, vector<int>& temp){
+        if(root==NULL)
+            return;
+        else{
+            recursion(root->left,temp);
+            temp.push_back(root->val);
+            recursion(root->right,temp);
+        }
+    }
+    bool findTarget(TreeNode* root,int k){
+        vector<int> temp;
+        recursion(root,temp);
+        int i=0,j=temp.size()-1;
+        while(i<j){
+            if(temp[i]+temp[j]==k)
+                return true;
+            else if((temp[i]+temp[j])>k)
+                j-=1;
+            else
+                i+=1;
+        }
+        return false;
+    }
+};
+    	K-th largest element in a stream.
+      
+      	Flood-fill Algorithm
+        class Solution {
+public:
+     void dfs(vector<vector<int>>& image, int sr, int sc, int newColor,int source,int row,int col){
+         if(sr>=row || sc>=col || sr<0 || sc<0){
+             return ;
+         }
+         else if(image[sr][sc]!=source){
+             return ;
+         }
+         image[sr][sc]=newColor;
+         dfs(image,sr-1,sc,newColor,source,row,col);
+          dfs(image,sr+1,sc,newColor,source,row,col);
+          dfs(image,sr,sc-1,newColor,source,row,col);
+          dfs(image,sr,sc+1,newColor,source,row,col);
+     }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+       if(image[sr][sc]==newColor){
+           return image;
+       }
+        int source=image[sr][sc];
+          int row=image.size();
+          int col=image[0].size();
+          dfs(image,sr,sc,newColor,source,row,col);
+          return image;
+    }
+};
