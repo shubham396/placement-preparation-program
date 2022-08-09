@@ -1,0 +1,150 @@
+2-Sum-Problem
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& n, int t) {
+        map<int,int>mp;
+        vector<int>v;
+        for(int i=0;i<n.size();i++){
+            if(mp.find(t-n[i])!=mp.end()){
+                v.push_back(i);
+                v.push_back(mp[t-n[i]]);
+            }else{
+                mp[n[i]]=i;
+            }
+        }
+        return v;
+    }
+};
+4-sum-Problem
+class Solution {
+public:
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+          int len = nums.size();
+          sort(nums.begin(), nums.end());
+          vector<vector<int>> ans;
+       for(int i=0; i<len; i++){
+
+        if(i>0 && nums[i]==nums[i-1]) continue;
+        
+        for(int j=i+1; j<len; j++){
+            
+            if(j>i+1 && nums[j]==nums[j-1]) continue;
+            long sum1 = target - nums[i] - nums[j]*1L;
+            int low = j+1;
+            int high = len-1;
+            
+            while(low < high){
+                
+                int sum2 = nums[low] + nums[high];
+                if(sum2 < sum1){
+                    low++;
+                }else if(sum2 > sum1){
+                    high--;
+                }else{// equal to sum1
+                    ans.push_back({nums[i], nums[j], nums[low], nums[high]});
+                    
+                    int lowDup = nums[low];
+                    
+                    while(low < high && nums[low] == lowDup) low++;
+                    int highDup = nums[high];
+                    
+                    while(high > low && nums[high] == highDup) high--;
+                    
+                }
+            }
+        }
+    }
+  
+    return ans;
+}
+};
+
+Longest Consecutive Sequence
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+      set<int>st;
+        for(int i=0;i<nums.size();i++){
+            st.insert(nums[i]);
+        }
+        int c=1,ans=0;
+        for(auto i:st){
+            if(st.find(i+1)!=st.end()){
+                c++;
+            }
+            else{
+                ans=max(ans,c);
+                c=1;
+            }
+        }
+        return ans;
+    }
+};
+
+Largest Subarray with 0 sum
+class Solution{
+    public:
+    int maxLen(vector<int>&A, int n)
+    {   
+        // Your code here
+         unordered_map<int, int> mp;
+        mp[0] = -1;
+        int sum = 0;
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            sum += A[i];
+            if(mp.count(sum)){
+                ans = max(ans, i - mp[sum]);
+            }
+            else{
+                mp[sum] = i;
+            }
+        }
+        return ans;
+    }
+};
+Count number of subarrays with given Xor K
+#define ll long long int
+int Solution::solve(vector &a, int k){
+ll n = a.size() ;
+map<ll, ll> cnt ;
+ll xr=0, ans=0;
+for(ll i=0; i<n; i++){
+xr ^= a[i] ; // calculating prefix xor
+if(xr == k) // if the calculated xor till now is the required subarray
+ans++ ;
+ll y = xr^k ;
+if(cnt.find(y)!=cnt.end())
+ans += cnt[y] ;
+cnt[xr]++ ;
+}
+return ans ;
+}
+
+
+Longest Substring without repeat
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        set<int> sp;
+        int ans=0;
+      int j=0;
+        for(int i=0;i<s.size();i++){
+          if(sp.find(s[i])==sp.end()){
+              sp.insert(s[i]);
+              j++;
+           // if(ans<sp.size()){
+              int n=sp.size();
+              ans=max(n,ans);
+            
+          }
+            else{
+                sp.clear();
+                i=j;
+             
+            }
+            
+        }
+        return ans;
+    }
+};
