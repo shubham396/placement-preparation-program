@@ -1,0 +1,124 @@
+Reverse a LinkedList
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head || !(head -> next)) {
+            return head;
+        }
+        ListNode* node = reverseList(head -> next);
+        head -> next -> next = head;
+        head -> next = NULL;
+        return node;
+    }
+};
+
+Find the middle of LinkedList
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+};
+Merge two sorted Linked List (use method used in mergeSort)
+class Solution {
+public:
+   ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
+    
+    if(NULL == l1) return l2;
+    if(NULL == l2) return l1;
+    
+    ListNode* head=NULL;    // head of the list to return
+    
+    // find first element (can use dummy node to put this part inside of the loop)
+    if(l1->val < l2->val)       { head = l1; l1 = l1->next; }
+    else                        { head = l2; l2 = l2->next; }
+    
+    ListNode* p = head;     // pointer to form new list
+    
+    // I use && to remove extra IF from the loop
+    while(l1 && l2){
+        if(l1->val < l2->val)   { p->next = l1; l1 = l1->next; }
+        else                    { p->next = l2; l2 = l2->next; }
+        p=p->next;
+    }
+    
+    // add the rest of the tail, done!
+    if(l1)  p->next=l1;
+    else    p->next=l2;
+    
+    return head;
+}
+};
+Remove N-th node from back of LinkedList
+class Solution {
+public:
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+if(head->next==NULL || n==0){
+return NULL;
+}
+ListNode* temp=head;
+int cnt=0;
+while(temp!=NULL){
+cnt++;
+temp=temp->next;
+}
+if(cnt==n){
+return head->next;
+}
+int p=cnt-n;
+ListNode* curr=head;
+while(p){
+p--;
+if(p==0){
+ListNode* next1=curr->next;
+curr->next=curr->next->next;
+delete(next1);
+}
+curr=curr->next;
+}
+return head;
+}
+};
+Add two numbers as LinkedList
+class Solution{
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode *dummy=new ListNode();
+        ListNode *temp=dummy;
+        int carry=0;
+        while(l1!=NULL or l2!=NULL or carry)
+        {
+            int sum=0;
+            if(l1!=NULL)
+            {
+                sum=sum+l1->val;
+                l1=l1->next;
+            }
+            if(l2!=NULL)
+            {
+                sum=sum+l2->val;
+                l2=l2->next;
+            }
+            sum=sum+carry;
+            carry=sum/10;
+            ListNode *node=new ListNode(sum%10);
+            temp->next=node;
+            temp=temp->next;
+        }
+        return dummy->next;
+        }
+};
+Delete a given Node when a node is given.(0(1) solution)
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        node->val = node->next->val;  
+        node->next = node->next->next;
+       
+    }
+};
