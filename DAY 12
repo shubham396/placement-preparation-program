@@ -1,0 +1,92 @@
+	The N-th root of an integer
+  double multiply(double m,int n){
+    double ans=1.00;
+    while(n>0){
+        ans*=m;
+        n--;
+    }
+    return ans;
+}
+double findNthRootOfM(int n, long long m) {
+    double l=0,r=m+1,esp=1e-8;
+    while((r-l)>esp){
+        double mid=(l+r)/2.00;
+        if(multiply(mid,n) < (double)m){
+            l=mid;
+        }
+        else{
+            r=mid;
+        }
+    }
+    return l;
+}
+  K-th element of two sorted arrays
+  int kthElement(int arr1[], int arr2[], int n, int m, int k)
+    {
+        if(n > m)
+            return kthElement(arr2, arr1, m, n, k);
+            
+        int lo = max(0,k-m), hi = min(k,n), cut1, cut2;
+        
+        while(lo <= hi){
+            cut1 = (lo+hi)/2;
+            cut2 = k-cut1;
+            
+            int l1 = cut1 == 0 ? INT_MIN : arr1[cut1-1];
+            int l2 = cut2 == 0 ? INT_MIN : arr2[cut2-1];
+            int r1 = cut1 == n ? INT_MAX : arr1[cut1];
+            int r2 = cut2 == m ? INT_MAX : arr2[cut2];
+            
+            if( l1 <= r2 && l2 <= r1 ){
+                return max(l1,l2);
+            }
+            else if(l1 > r2)
+                hi = cut1-1;
+            else
+                lo = cut1+1;
+        }
+        return 0;
+    }
+  	Aggressive Cows
+    bool canPlace(int dist,int c,vector<int> positions,int n){
+    int ninjasplaced=1;
+    int recentplacedat=0;
+    for(int i=1;i<n;i++){
+        if(positions[i]-positions[recentplacedat] >= dist){ // if the room posion and prevly placed room pos mein distance agar >= dist hai then can be placed, 
+            ninjasplaced++; // placed increment
+            recentplacedat=i; // recen kaha pe daala woh index store.
+        }
+    }
+    if(ninjasplaced>=c){ // agar placed >= c hai matlab saare place hogaye so return possible
+        return true;
+    }else{
+        return false; //else cannot be placed.
+    }
+}
+
+
+int chessTournament(vector<int> positions , int n ,  int c){
+	
+    sort(positions.begin(),positions.end()); // sort to find high and low easily.
+    int l=0;
+    int h=positions[n-1]-positions[0];
+    int ans=0;
+    // monotonous space for dist between rooms,
+    /*
+    if the array is 1 2 4 5, the min dist is 1(2,1) and max dist betweeb rooms is 4 (5-1);
+    1 2 3 4 --> l at 1 and h at 4.
+    */
+    while(l<=h){
+        int mid=(l+h)/2;
+        if(canPlace(mid,c,positions,n)){ // with mid as a distance between rooms can be placed? yes then low=mid+1 cuz we want max dist possible
+            ans=mid;
+            l=mid+1;
+        }else{ // else h=mid-1 cant be placed with mid as a distance between them.
+            h=mid-1;
+        }
+    }
+    
+    return ans; // store and return the answer.
+    
+}
+    
