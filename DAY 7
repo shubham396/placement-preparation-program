@@ -1,0 +1,130 @@
+Rotate a LinkedList
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(!head) return head;
+        
+        int len=1; // number of nodes
+        ListNode *newH, *tail;
+        newH=tail=head;
+        
+        while(tail->next)  // get the number of nodes in the list
+        {
+            tail = tail->next;
+            len++;
+        }
+        tail->next = head; // circle the link
+
+        if(k %= len) 
+        {
+            for(auto i=0; i<len-k; i++) tail = tail->next; // the tail node is the (len-k)-th node (1st node is head)
+        }
+        newH = tail->next; 
+        tail->next = NULL;
+        return newH;
+    }
+};
+Clone a Linked List with random and next pointer
+
+3 sum
+  vector<vector<int>> ans;
+        sort(nums.begin(), nums.end());
+        for(int i=0;i<nums.size()-2;i++)        //here iterate upto third last because second last and last numbers are occupied with b and c. 
+        {
+            //For moving a
+            if(i==0|| (i>0 && nums[i]!=nums[i-1]))
+            {
+                int lo=i+1, hi=nums.size()-1, sum=0-nums[i];
+                while(lo<hi)
+                {
+                    if(nums[lo]+nums[hi]==sum)
+                    {
+                        vector<int> temp;
+                        temp.push_back(nums[i]);
+                        temp.push_back(nums[lo]);
+                        temp.push_back(nums[hi]);
+                        ans.push_back(temp);
+                      
+                    while(lo<hi && nums[lo]==nums[lo+1]) lo++;
+                    while(lo<hi && nums[hi]==nums[hi-1]) hi--;
+                    
+                    lo++; hi--;
+                }    
+                else if(nums[lo]+nums[hi]<sum) lo++;
+                else hi--;
+            }  
+        }
+    }      
+        
+        return ans;
+        
+        // Time Complexity:- O(N^2) and Space Complexity:- O(N)
+        
+        
+    }
+};
+Trapping rainwater
+class Solution {
+public:
+    int trap(vector<int>& height) {
+
+        int n = height.size();
+
+        int low = 0,high = n-1;
+
+        int lmax = 0,rmax = 0,res =0;
+
+        while(low<=high){
+
+            if(height[low] <= height[high]){
+
+                if(height[low] >= lmax){
+                    lmax = height[low];
+                }else{
+                    res += lmax-height[low];
+                }
+                low++;
+            }else{
+
+                if(height[high] >= rmax){
+                    rmax = height[high];
+                }else{
+                    res += rmax-height[high];
+                }
+                high--;
+            } 
+        }
+        return res;
+
+    }
+};
+Remove Duplicate from Sorted array
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        set<int>s={nums.begin(),nums.end()};
+        nums.assign(s.begin(),s.end());
+        return s.size();
+    }
+};
+
+Max consecutive ones
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int n=nums.size();
+        int c=0;
+        int ans=0;
+        for(int i=0;i<n;i++){
+            
+            if(nums[i]==1){
+                c++;
+            }else{
+                ans=max(c,ans);
+                c=0;
+            }
+        }
+        ans=max(ans,c);
+        return ans;
+    }
+};
