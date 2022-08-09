@@ -1,0 +1,219 @@
+Reverse Words in a String
+class Solution {
+public:
+    string reverseWords(string s) {
+        s+=' ';
+        string t;
+       vector<string>ans;
+        for(int i=0;i<s.size();i++){
+            if(s[i]==' '){
+                if(!t.empty())
+                ans.push_back(t);
+                //cout<<t<<endl;
+                t.clear();
+            }else{
+             //   cout<<s[i]<<endl;
+            t.push_back(s[i]);
+                }
+        }
+      reverse(ans.begin(),ans.end());
+        string k;
+        for(int i=0;i<ans.size();i++){
+            //cout<<ans[i]<<endl;
+            k+=ans[i];
+            k+=' ';
+        }
+        k.pop_back();
+        return k;
+    }
+};
+Longest Palindrome in a string
+class Solution {
+public:
+  string longestPalindrome(string s) {
+    if (s.empty()) return "";
+    if (s.size() == 1) return s;
+    int min_start = 0, max_len = 1;
+    for (int i = 0; i < s.size();) {
+      if (s.size() - i <= max_len / 2) break;
+      int j = i, k = i;
+      while (k < s.size()-1 && s[k+1] == s[k]) ++k; // Skip duplicate characters.
+      i = k+1;
+      while (k < s.size()-1 && j > 0 && s[k + 1] == s[j - 1]) { ++k; --j; } // Expand.
+      int new_len = k - j + 1;
+      if (new_len > max_len) { min_start = j; max_len = new_len; }
+    }
+    return s.substr(min_start, max_len);
+}
+
+
+};
+Longest Common Prefix
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+       sort(strs.begin(),strs.end());
+        string s=strs[0];
+        string t=strs[strs.size()-1];
+        string ans="";
+        for(int i=0;i<s.size();i++){
+            if(s[i]==t[i]){
+                ans+=s[i];
+            }else{
+                break;
+            }
+        }
+        return ans;
+    }
+};
+	Rabin Karp
+  class Solution {
+private:
+    int BASE = 1000000;
+public:
+    int repeatedStringMatch(string A, string B) {
+        if(A == B) return 1;
+        int count = 1;
+        string source = A;
+        while(source.size() < B.size()){
+            count++;
+            source+=A;
+        }
+        if(source == B) return count;
+        if(Rabin_Karp(source,B) != -1) return count;
+        if(Rabin_Karp(source+A,B) != -1) return count+1;
+        return -1;
+    }
+    int Rabin_Karp(string source, string target){
+        if(source == "" or target == "") return -1;
+        int m = target.size();
+        int power = 1;
+        for(int i = 0;i<m;i++){
+            power = (power*31)%BASE;
+        }
+        int targetCode = 0;
+        for(int i = 0;i<m;i++){
+            targetCode = (targetCode*31+target[i])%BASE;
+        }
+        int hashCode = 0;
+        for(int i = 0;i<source.size();i++){
+            hashCode = (hashCode*31 + source[i])%BASE;
+            if(i<m-1) continue;
+            if(i>=m){
+                hashCode = (hashCode-source[i-m]*power)%BASE;
+            }
+            if(hashCode<0)
+                hashCode+=BASE;
+            if(hashCode == targetCode){
+                if(source.substr(i-m+1,m) == target)
+                    return i-m+1;
+            }
+        }
+        return -1;
+    }
+};
+  	Check for Anagrams
+    class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        char k[26]={0};
+        for(int i=0;i<s.size();i++){
+            k[s[i]-'a']++;
+        }
+        for(int j=0;j<t.size();j++){
+            k[t[j]-'a']--;
+        }
+        for(int i=0;i<26;i++){
+            if(k[i]!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+};
+    	Count and Say
+      class Solution {
+public:
+    string countAndSay(int n) {
+        
+        // start with base case
+
+        string prev = "1";
+        
+        int k = 1;
+        
+        while(k < n)
+        {
+            string curr = "";
+            
+            int i = 0;
+            
+            while(i < prev.size())
+            {
+                int count = 1;
+                
+                char ch = prev[i];
+                
+                // count the consecutive characters
+                
+                while(i < prev.size() - 1 && prev[i] == prev[i + 1])
+                {
+                    count++;
+                    
+                    i++;
+                }
+                
+                // update the curr
+                
+                curr += to_string(count);
+                
+                curr += ch;
+                
+                i++;
+            }
+            
+            // update the prev as curr and increment k
+            
+            prev = curr;
+            
+            k++;
+        }
+        
+        return prev;
+    }
+};
+      Compare version numbers
+      class Solution {
+public:
+   int compareVersion(string version1, string version2) {
+    int i = 0; 
+    int j = 0;
+    int n1 = version1.size(); 
+    int n2 = version2.size();
+    
+    int num1 = 0;
+    int num2 = 0;
+    while(i<n1 || j<n2)
+    {
+        while(i<n1 && version1[i]!='.'){
+            num1 = num1*10+(version1[i]-'0');
+            i++;
+        }
+        
+        while(j<n2 && version2[j]!='.'){
+            num2 = num2*10+(version2[j]-'0');;
+            j++;
+        }
+        
+        if(num1>num2) return 1;
+        else if(num1 < num2) return -1;
+        
+        num1 = 0;
+        num2 = 0;
+        i++;
+        j++;
+    }
+    
+    return 0;
+   }
+};
