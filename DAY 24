@@ -1,0 +1,157 @@
+	DFS
+   void dfs(int i, vector<int> adj[], vector<bool>& vis, vector<int>&ans){
+       
+       vis[i] = true;
+       ans.push_back(i);
+       
+       for(int j=0; j<adj[i].size(); j++){   
+            
+              int element = adj[i][j];
+              
+
+                 if(vis[element] ){
+                      continue;
+                  }
+                  
+             dfs(element , adj , vis , ans);
+         
+          }
+   }
+  BFS
+  vector<int> bfs(vector<int> adj[],int s,bool visited[])
+    {
+        queue<int> q;
+        vector<int> ans;
+        visited[s] = true;
+        q.push(s);
+        while(!q.empty())
+        {
+            int u = q.front();
+            q.pop();
+            ans.push_back(u);
+            for(auto v:adj[u])
+            {
+                if(visited[v]==false)
+                {
+                    visited[v]=true;
+                    q.push(v);
+                }
+            }
+        }
+        return ans;
+    }
+    
+  Detect A cycle in Undirected Graph using BFS
+  class Solution {
+public:
+	bool isCycle(int i, vector<int>&visited, vector<vector<int>>& g)
+	{
+		if(visited[i]==1)   return true;
+		visited[i]=1;
+		for(int j=0;j<g[i].size();j++)
+			if(visited[g[i][j]]!=2)
+				if(isCycle(g[i][j],visited,g))
+					return true;
+		visited[i]=2;
+		return false;
+	}
+	bool canFinish(int c, vector<vector<int>>& pre) {
+		int n = pre.size();
+		vector<int>visited(c,0);
+		vector<vector<int>> graph(c);
+		for(int i=0;i<n;i++)    graph[pre[i][0]].push_back(pre[i][1]);
+		for(int i=0;i<c;i++)
+			if(visited[i]==0)   
+				if(isCycle(i,visited,graph))    
+					return  false;
+		return true;
+	}
+};
+  Detect A cycle in Undirected Graph using DFS
+  
+  	Dijkstra’s Algorithm
+    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
+   {
+       // Code here
+       vector<int> dist(V, INT_MAX);
+       vector<bool> fin(V, false);
+       dist[S]=0;
+       for (int count=0; count<V-1; count++){
+           int u=-1;
+           for (int i=0; i<V; i++){
+               if (!fin[i] && (u==-1 || dist[i]<dist[u])){
+                   u=i;
+               }
+           }
+           fin[u]=true;
+           for (auto e: adj[u]){
+               if (!fin[e[0]] && dist[e[0]]>dist[u]+e[1]){
+                   dist[e[0]]=dist[u]+e[1];
+               }
+           }
+       }
+       return dist;
+   }
+    MST using Prim’s Algo
+    int spanningTree(int V, vector<vector<int>> adj[])
+   {
+       // code here
+       
+       // 3 steps 
+       
+       // 1st step : Select node with min weight 
+       // 2nd step : include selected node in mst 
+       // 3rd step : relax all adjacent nodes of selected node 
+       
+       
+       
+     
+       vector<int>key( V , INT_MAX ) ;
+       vector<bool>vis( V , false ) ;
+       
+       key[0] = 0 ;
+      
+       for( int count = 0 ; count < V-1 ; count++ )
+       {
+           int mini = INT_MAX ;
+           int u ;
+           
+           
+           // 1st step selecting minimum unvisited node 
+           
+           for( int v = 0 ; v<V ; v++)
+           {
+               if(!vis[v] && key[v] < mini )
+               {
+                   mini = key[v] ;
+                   u = v ;
+               }
+           }
+          
+          // 2nd step  including selected node in mst  
+           vis[u] = true ;
+           
+           
+           // 3rd step relaxing all adjacent nodes of selected node 
+           
+           for( auto it : adj[u])
+           {
+               int v = it[0] ;
+               int weight = it[1] ;
+               
+               if( vis[v] == false && weight < key[v])
+               {
+                  key[v] = weight ;
+               }
+           }
+       }
+       
+       int cost = 0 ;
+       
+       for( auto i : key )
+       {
+           cost += i ;
+       }
+       
+       return cost ;
+   }
