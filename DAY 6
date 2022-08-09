@@ -1,0 +1,151 @@
+Find intersection point of Y LinkedList
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
+{
+    ListNode *p1 = headA;
+    ListNode *p2 = headB;
+        
+    if (p1 == NULL || p2 == NULL) return NULL;
+
+    while (p1 != NULL && p2 != NULL && p1 != p2) {
+        p1 = p1->next;
+        p2 = p2->next;
+
+        //
+        // Any time they collide or reach end together without colliding 
+        // then return any one of the pointers.
+        //
+        if (p1 == p2) return p1;
+
+        //
+        // If one of them reaches the end earlier then reuse it 
+        // by moving it to the beginning of other list.
+        // Once both of them go through reassigning, 
+        // they will be equidistant from the collision point.
+        //
+        if (p1 == NULL) p1 = headB;
+        if (p2 == NULL) p2 = headA;
+    }
+        
+    return p1;
+}
+Detect a cycle in Linked List
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if(head==NULL){
+            return false;
+        }
+        while(head){
+            if(head->val==1000000){
+                return true;
+            }
+            head->val=1000000;
+            head=head->next;
+        }
+        return false;
+    }
+};
+Reverse a LinkedList in groups of size k.
+
+Check if a LinkedList is palindrome or not.
+class Solution {
+public:
+    ListNode* findMid(ListNode* head){
+        ListNode* slow=head,*fast=head;
+        while(fast!=NULL && fast->next!=NULL){
+            slow=slow->next;
+            fast=fast->next;
+            if(fast) fast=fast->next;
+        }
+        return slow;
+    }
+    ListNode* reverseList(ListNode* head){
+        ListNode* prev=NULL,*curr=head,*temp=NULL;
+        while(curr != NULL){
+            temp=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=temp;
+        }
+        return prev;
+    }
+    bool compareList(ListNode* head1, ListNode* head2){
+        while(head1!=NULL && head2!=NULL){
+            if(head1->val != head2->val) return false;
+            head1=head1->next;
+            head2=head2->next;
+        }
+        return true;
+    }
+    bool isPalindrome(ListNode* head) {
+        if(head==NULL || head->next==NULL) return true;
+        ListNode* h=head;
+        ListNode* mid = findMid(h);
+        ListNode* h2=reverseList(mid);
+        return compareList(head,h2);
+    }
+};
+Find the starting point of the Loop of LinkedList
+
+Flattening of a LinkedList
+Node *flatten(Node *root)
+{
+   // Your code here
+   Node* temp =root,*temp1=root;
+   while(root->next)
+   {
+       temp=root->next;
+       temp1=root;
+           root->next=temp->next;
+       while(temp1 && temp)
+       {
+           if(temp1->data < temp->data)
+           {
+               if(temp1->bottom==NULL)
+               {
+                   Node *newNode1 = new Node(temp->data);
+                   temp1->bottom=newNode1;
+                   temp1=newNode1;
+                   temp = temp->bottom;
+               }
+             else
+             {
+               temp1 = temp1->bottom;
+             }
+               
+           }
+       
+           else
+           {
+               
+               Node* temp3 = root;
+               if(temp3==temp1)
+               {
+                    Node *newNode = new Node(temp->data);
+                    newNode->bottom=temp3;
+                    newNode->next=root->next;
+                    root=newNode;
+                    temp=temp->bottom;
+               }
+               else
+               {
+               while(temp3->bottom!=temp1)
+               {
+                   temp3=temp3->bottom;
+               }
+               Node *newNode = new Node(temp->data);
+               temp3->bottom=newNode;
+               newNode->bottom = temp1;
+               temp=temp->bottom;
+               if(!temp)
+               {
+               temp1=root;
+               }
+               }
+               
+           }
+           
+       }
+   }
+   return root;
+}
