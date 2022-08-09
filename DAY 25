@@ -1,0 +1,118 @@
+Max Product Subarray
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+       int ma=nums[0];
+        int mi=ma;
+        int ans=ma;
+        for(int i=1;i<nums.size();i++){
+            if(nums[i]<0){
+                swap(ma,mi);
+            }
+            ma=max(nums[i],ma*nums[i]);
+            mi=min(nums[i],mi*nums[i]);
+            ans=max(ans,ma);
+        }
+        return ans;
+    }
+};
+	Longest Increasing Subsequence
+  class Solution { // 8 ms, faster than 91.61%
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> sub;
+        for (int x : nums) {
+            if (sub.empty() || sub[sub.size() - 1] < x) {
+                sub.push_back(x);
+            } else {
+                auto it = lower_bound(sub.begin(), sub.end(), x); // Find the index of the smallest number >= x
+                *it = x; // Replace that number with x
+            }
+        }
+        
+        return sub.size();
+    }
+};
+  Longest Common Subsequence
+  class Solution {
+public:
+    int longestCommonSubsequence(string &text1, string &text2,int m,int n,int memo[][1001]) {
+        if(m==0 || n==0){
+            return 0;
+        }
+        if(memo[m][n]!=-1){
+            return memo[m][n];
+        }
+        if(text1[m-1]==text2[n-1]){
+            return memo[m][n]= 1+longestCommonSubsequence(text1,text2,m-1,n-1,memo);
+        }else{
+            return memo[m][n]= max(longestCommonSubsequence(text1,text2,m-1,n,memo),longestCommonSubsequence(text1,text2,m,n-1,memo));
+        }
+    }
+    
+    int longestCommonSubsequence(string text1, string text2) {
+        int m=text1.size(),n=text2.size();
+        int memo[1001][1001];
+        for(int i=0;i<1001;i++){
+            for(int j=0;j<1001;j++){
+                memo[i][j]=-1;
+            }
+        }
+        return longestCommonSubsequence(text1,text2,m,n,memo);
+    }
+};
+  0-1 Knapsack
+  int findMaxForm(vector<string>& s, int m, int n) {
+        int l = s.size();
+        vector<pair<int, int>> v;
+        for(auto i : s){
+			// u can refer lambda expression if u r confused here, or u can do this normally.
+            v.push_back({count_if(i.begin(), i.end(),[](char c){return c=='0';}), count_if(i.begin(), i.end(),[](char c){return c=='1';})});
+        }
+        // no repetitions so we will use k->m->n loop instead of m->n->k loop.
+		
+        int dp[m+1][n+1];
+        int maxi = 0;
+        memset(dp, 0, sizeof(dp));
+        
+        for(auto k : v){
+            for(int i = m; i>=0; i--){
+                for(int j = n; j >=0; j--){
+                    // the reason we are moving backwards is we don't want repetitions, 
+					//like, if we add a value to the dp, we will add at some dp[i1][j1] which we already visited, so in this way we can avoid multiple additions
+					if((dp[i][j] !=0 || (i==0 && j == 0)) && ( i+k.first < m+1 && j+k.second < n+1) ){
+						// print the matrix and see how to dp matrix is being generated
+                        dp[i+k.first][j+k.second] = max(dp[i+k.first][j+k.second], dp[i][j]+1);
+                    }
+                }
+            }
+        }
+        
+        
+        for(int i =0; i < m+1; i++)
+            for(int j=0; j < n+1; j++) 
+                maxi = max(maxi, dp[i][j]);
+
+        return maxi;
+    }
+
+  	Edit Distance
+    	Maximum sum increasing subsequence
+      int maxSumIS(int arr[], int n)  
+{  
+    // Your code goes here
+    int sm[n],
+    ans = 0;
+    for(int i=0; i<n; i++){
+        int res = 0;
+        for(int j=i-1; j>=0; j--){
+            if(arr[j] < arr[i]){
+                res = max(res, sm[j]);
+            }
+        }
+        sm[i] = res + arr[i];
+        ans = max(ans, sm[i]);
+    }
+    return ans;
+} 
+      
