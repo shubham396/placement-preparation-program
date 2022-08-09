@@ -1,0 +1,119 @@
+N meetings in one room
+bool sortbysec(const pair<int, int> &a, const pair<int, int> &b)
+{
+    return (a.second < b.second);
+}
+int maxMeetings(int start[], int end[], int n)
+{
+    vector<pair<int, int>> v;
+    for (int i = 0; i < n; i++
+    {
+        v.push_back(make_pair(start[i], end[i]));
+    }
+    sort(v.begin(), v.end(), sortbysec);
+    int c = 1;
+    int k = v[0].second;
+    for (int i = 1; i < n; i++)
+    {
+        if (v[i].first > k)
+        {
+            c++;
+            k = v[i].second;
+       }
+    }
+    return c;
+}
+Minimum number of platforms required for a railway
+  int findPlatform(int arr[], int dep[], int n)
+   {
+   int need=1; int j=0; int max=1;
+   sort(arr,arr+n);
+   sort(dep,dep+n);
+   for(int i=1;i<n;i++){
+       if(arr[i]>dep[j]){
+        j++; }
+       else
+       need++;
+       if(need>max)
+       max=need;
+   }
+   return max;
+   }
+Job sequencing Problem
+ vector<int> JobScheduling(Job arr[], int n) 
+    { 
+        // your code here
+        vector<pair<int,int>>v;
+        for(auto i:Job){
+            v.push_back({i.profit,i.dead});
+        }
+        sort(v.begin(),v.end());
+        int sum=v[0].first;
+        int c=1;
+        for(int i=1;i<v.size();i++){
+            if(v[i].second>v[i-1].second){
+            sum+=v[i].first;
+            c++;
+            }
+        }
+            
+        
+        vector<int>ans;
+        ans.push_back(c);
+        ans.push_back(ans);
+        return ans;
+    } 
+Fractional Knapsack Problem
+O(1) space complexity . sort the given array according to value/weight ration using comparator function.
+
+ 
+
+class Solution
+{
+   public:
+   static bool comp(Item a, Item b){   
+       return ((double)a.value/a.weight) > ((double)b.value/b.weight);
+   }
+   //Function to get the maximum total value in the knapsack.
+   double fractionalKnapsack(int W, Item arr[], int n)
+   {
+       sort(arr,arr+n,comp);
+       double mx = 0;
+       for(int i=0;i<n && W>0;i++){
+           double perunit = (double)arr[i].value/arr[i].weight)
+           if(W>=arr[i].weight){
+               W -= arr[i].weight;
+               mx += (perunit*arr[i].weight);
+           }else{
+              mx += (perunit*W);
+               W=0;      
+           }
+       }
+      return mx;    
+   }   
+};
+Greedy algorithm to find minimum number of coins
+int minCoins(int coins[], int m, int V)
+{
+   // base case
+   if (V == 0) return 0;
+ 
+   // Initialize result
+   int res = INT_MAX;
+ 
+   // Try every coin that has smaller value than V
+   for (int i=0; i<m; i++)
+   {
+     if (coins[i] <= V)
+     {
+         int sub_res = minCoins(coins, m, V-coins[i]);
+ 
+         // Check for INT_MAX to avoid overflow and see if
+         // result can minimized
+         if (sub_res != INT_MAX && sub_res + 1 < res)
+            res = sub_res + 1;
+     }
+   }
+   return res;
+}
+Activity Selection (it is the same as N meeting in one room)
